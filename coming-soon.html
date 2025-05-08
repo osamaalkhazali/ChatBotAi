@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Coming Soon - AI Shopping Assistant</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            :root {
+                --primary: #6c63ff;
+                --primary-dark: #5a52d5;
+                --primary-light: #8a84ff;
+                --secondary: #4f46e5;
+                --text-dark: #1e293b;
+                --text-light: #334155;
+                --text-muted: #64748b;
+                --background: #ffffff;
+                --background-alt: #f8fafc;
+                --card-bg: #ffffff;
+                --card-border: #e2e8f0;
+                --success: #10b981;
+                --warning: #f59e0b;
+                --danger: #ef4444;
+            }
+
+            .dark {
+                --primary: #8a84ff;
+                --primary-dark: #6c63ff;
+                --primary-light: #a5a0ff;
+                --secondary: #6366f1;
+                --text-dark: #f8fafc;
+                --text-light: #e2e8f0;
+                --text-muted: #94a3b8;
+                --background: #0f172a;
+                --background-alt: #1e293b;
+                --card-bg: #1e293b;
+                --card-border: #334155;
+                --success: #34d399;
+                --warning: #fbbf24;
+                --danger: #f87171;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Poppins", sans-serif;
+                background-color: var(--background);
+                color: var(--text-dark);
+                line-height: 1.6;
+                position: relative;
+                min-height: 100vh;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            /* Dark mode toggle */
+            .theme-toggle {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 100;
+                background-color: var(--card-bg);
+                border: 1px solid var(--card-border);
+                border-radius: 50%;
+                width: 42px;
+                height: 42px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: all 0.3s;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .theme-toggle:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .theme-toggle i {
+                font-size: 1.2rem;
+                color: var(--primary);
+            }
+
+            /* Countdown */
+            .countdown {
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
+                margin: 2rem 0;
+            }
+
+            .countdown-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-width: 70px;
+            }
+
+            .countdown-value {
+                background: linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+                color: white;
+                border-radius: 12px;
+                font-size: 2rem;
+                font-weight: 600;
+                width: 70px;
+                height: 70px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .countdown-label {
+                margin-top: 0.5rem;
+                font-size: 0.85rem;
+                font-weight: 500;
+                color: var(--text-muted);
+            }
+
+            .container {
+                width: 100%;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem 1.5rem;
+            }
+
+            header {
+                text-align: center;
+                padding: 1rem 0;
+                margin-bottom: 2rem;
+            }
+
+            .logo {
+                font-size: 1.8rem;
+                font-weight: 700;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .logo i {
+                margin-right: 0.5rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin: 1.5rem 0;
+                background: linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: gradient 10s ease infinite;
+                background-size: 200% 200%;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+                color: var(--text-light);
+                margin-bottom: 2rem;
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            /* Main sections */
+            .main-content {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            @media (min-width: 992px) {
+                .main-content {
+                    grid-template-columns: 5fr 4fr;
+                    align-items: center;
+                }
+            }
+
+            .demo-container {
+                background-color: var(--card-bg);
+                border-radius: 16px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                height: 500px;
+                display: flex;
+                flex-direction: column;
+                border: 1px solid var(--card-border);
+                transition: all 0.3s;
+            }
+
+            .demo-header {
+                background: linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+                color: white;
+                padding: 1rem;
+                display: flex;
+                align-items: center;
+            }
+
+            .demo-header i {
+                margin-right: 0.5rem;
+                font-size: 1.2rem;
+            }
+
+            .demo-messages {
+                flex-grow: 1;
+                padding: 1rem;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                background-color: var(--background-alt);
+            }
+
+            .message {
+                display: flex;
+                margin-bottom: 1rem;
+                max-width: 80%;
+            }
+
+            .message.bot {
+                align-self: flex-start;
+            }
+
+            .message.user {
+                align-self: flex-end;
+                flex-direction: row-reverse;
+            }
+
+            .avatar {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .bot .avatar {
+                background-color: var(--primary);
+                color: white;
+            }
+
+            .user .avatar {
+                background-color: #64748b;
+                color: white;
+            }
+
+            .content {
+                background-color: var(--card-bg);
+                padding: 0.75rem 1rem;
+                border-radius: 1rem;
+                margin: 0 0.5rem;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            }
+
+            .bot .content {
+                border-top-left-radius: 0;
+                border-left: 3px solid var(--primary);
+            }
+
+            .user .content {
+                border-top-right-radius: 0;
+                background-color: var(--primary);
+                color: white;
+            }
+
+            .products-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+                margin-top: 0.75rem;
+            }
+
+            .product-card {
+                background-color: var(--card-bg);
+                border: 1px solid var(--card-border);
+                border-radius: 0.5rem;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .product-image {
+                height: 100px;
+                background-color: #f1f5f9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .product-details {
+                padding: 0.5rem;
+            }
+
+            .product-title {
+                font-size: 0.75rem;
+                font-weight: 600;
+                margin-bottom: 0.25rem;
+            }
+
+            .product-price {
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: var(--primary);
+            }
+
+            .product-rating {
+                font-size: 0.7rem;
+                color: #f59e0b;
+            }
+
+            .demo-input {
+                padding: 1rem;
+                border-top: 1px solid var(--card-border);
+                display: flex;
+                background-color: var(--card-bg);
+            }
+
+            .demo-input input {
+                flex-grow: 1;
+                padding: 0.75rem 1rem;
+                border: 1px solid var(--card-border);
+                border-radius: 2rem;
+                outline: none;
+                font-family: inherit;
+                background-color: var(--background-alt);
+                color: var(--text-dark);
+            }
+
+            .demo-input input:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+            }
+
+            .demo-input button {
+                margin-left: 0.5rem;
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                background-color: var(--primary);
+                color: white;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .demo-input button:hover {
+                background-color: var(--primary-dark);
+            }
+
+            /* Content section */
+            .text-content {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .feature {
+                display: flex;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+                background: linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-size: 1.2rem;
+                flex-shrink: 0;
+            }
+
+            .feature-content h3 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+                color: var(--text-dark);
+            }
+
+            .feature-content p {
+                color: var(--text-muted);
+                font-size: 0.95rem;
+            }
+
+            .notify-form {
+                margin-top: 2rem;
+                background-color: var(--card-bg);
+                border-radius: 12px;
+                padding: 1.5rem;
+                border: 1px solid var(--card-border);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .notify-form h3 {
+                margin-bottom: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .email-input {
+                display: flex;
+                margin-bottom: 1rem;
+            }
+
+            .email-input input {
+                flex-grow: 1;
+                padding: 0.75rem 1rem;
+                border: 1px solid var(--card-border);
+                border-radius: 0.5rem 0 0 0.5rem;
+                outline: none;
+                font-family: inherit;
+                background-color: var(--background-alt);
+                color: var(--text-dark);
+            }
+
+            .email-input button {
+                padding: 0.75rem 1.5rem;
+                background-color: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 0 0.5rem 0.5rem 0;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .email-input button:hover {
+                background-color: var(--primary-dark);
+            }
+
+            .privacy-note {
+                font-size: 0.8rem;
+                color: var(--text-muted);
+            }
+
+            /* Footer */
+            footer {
+                margin-top: 4rem;
+                text-align: center;
+                padding: 2rem 0;
+                border-top: 1px solid var(--card-border);
+                color: var(--text-muted);
+            }
+
+            .social-links {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                margin: 1rem 0;
+            }
+
+            .social-links a {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background-color: var(--background-alt);
+                color: var(--text-muted);
+                transition: all 0.3s;
+                border: 1px solid var(--card-border);
+            }
+
+            .social-links a:hover {
+                background-color: var(--primary);
+                color: white;
+                transform: translateY(-2px);
+            }
+
+            /* Animations */
+            @keyframes gradient {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .fade-in {
+                animation: fadeIn 0.5s ease forwards;
+            }
+
+            /* Typing animation */
+            .typing-animation::after {
+                content: "|";
+                animation: blink 1s infinite;
+            }
+
+            @keyframes blink {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </div>
+
+        <div class="container">
+            <header>
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>ShopBot AI</span>
+                </div>
+                <h1>Coming Soon: AI-Powered Shopping Assistant</h1>
+                <p class="subtitle">
+                    We're building a revolutionary shopping experience that uses
+                    advanced AI to understand your needs and find the perfect
+                    products. Our launch is just around the corner!
+                </p>
+
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="days">00</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                <div class="demo-container">
+                    <div class="demo-header">
+                        <i class="fas fa-robot"></i>
+                        <span>ShopBot Assistant</span>
+                    </div>
+                    <div class="demo-messages" id="demo-messages">
+                        <div class="message bot">
+                            <div class="avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="content">
+                                Hello! I'm your AI shopping assistant. Ask me
+                                about any products you're looking for!
+                            </div>
+                        </div>
+                        <div class="message user">
+                            <div class="avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="content">
+                                I need a gift for my chef friend
+                            </div>
+                        </div>
+                        <div class="message bot">
+                            <div class="avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="content">
+                                Great choice! Here are some perfect gift ideas
+                                for your chef friend:
+
+                                <div class="products-grid">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <i
+                                                class="fas fa-utensils fa-2x"
+                                                style="color: #cbd5e1"
+                                            ></i>
+                                        </div>
+                                        <div class="product-details">
+                                            <div class="product-title">
+                                                Premium Chef Knife Set
+                                            </div>
+                                            <div class="product-price">
+                                                89.99 JOD
+                                            </div>
+                                            <div class="product-rating">
+                                                ★★★★★ (42)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                            <i
+                                                class="fas fa-cut fa-2x"
+                                                style="color: #cbd5e1"
+                                            ></i>
+                                        </div>
+                                        <div class="product-details">
+                                            <div class="product-title">
+                                                Personalized Cutting Board
+                                            </div>
+                                            <div class="product-price">
+                                                49.99 JOD
+                                            </div>
+                                            <div class="product-rating">
+                                                ★★★★☆ (28)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    style="margin-top: 10px; font-size: 0.8rem"
+                                >
+                                    <a href="#" style="color: var(--primary)"
+                                        >See all 6 recommendations →</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="demo-input">
+                        <input
+                            type="text"
+                            placeholder="Ask for product recommendations..."
+                            id="demo-input-field"
+                        />
+                        <button id="demo-send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="text-content">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>AI-Powered Shopping Experience</h3>
+                            <p>
+                                Our intelligent shopping assistant uses advanced
+                                AI to understand your needs in natural language.
+                                Simply describe what you're looking for, and our
+                                AI will find the perfect products for you.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Smart Product Recommendations</h3>
+                            <p>
+                                ShopBot analyzes thousands of products in
+                                real-time to recommend items that match your
+                                specific requirements, preferences, and budget
+                                constraints.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Natural Conversation</h3>
+                            <p>
+                                Chat with our AI assistant just like you would
+                                with a human shopping expert. Ask follow-up
+                                questions, refine your search, and get
+                                personalized responses.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="notify-form">
+                        <h3>Get notified when we launch!</h3>
+                        <div class="email-input">
+                            <input
+                                type="email"
+                                placeholder="Your email address"
+                                id="email-input"
+                            />
+                            <button id="notify-btn">Notify Me</button>
+                        </div>
+                        <p class="privacy-note">
+                            We respect your privacy and will never share your
+                            email.
+                        </p>
+                    </div>
+                </div>
+            </main>
+
+            <footer>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <p>&copy; 2025 ShopBot AI Assistant. All rights reserved.</p>
+            </footer>
+        </div>
+
+        <script>
+            // Dark mode toggle
+            const themeToggle = document.getElementById("theme-toggle");
+            const body = document.body;
+
+            // Check for saved theme preference or use preferred color scheme
+            const savedTheme = localStorage.getItem("theme");
+            if (
+                savedTheme === "dark" ||
+                (!savedTheme &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ) {
+                body.classList.add("dark");
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            // Toggle theme
+            themeToggle.addEventListener("click", () => {
+                body.classList.toggle("dark");
+
+                if (body.classList.contains("dark")) {
+                    localStorage.setItem("theme", "dark");
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    localStorage.setItem("theme", "light");
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            });
+
+            // Countdown timer
+            function updateCountdown() {
+                // Set launch date: June 15, 2025
+                const launchDate = new Date("June 15, 2025 00:00:00").getTime();
+                const now = new Date().getTime();
+                const timeLeft = launchDate - now;
+
+                if (timeLeft > 0) {
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor(
+                        (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+                    );
+                    const minutes = Math.floor(
+                        (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+                    );
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                    document.getElementById("days").textContent = days
+                        .toString()
+                        .padStart(2, "0");
+                    document.getElementById("hours").textContent = hours
+                        .toString()
+                        .padStart(2, "0");
+                    document.getElementById("minutes").textContent = minutes
+                        .toString()
+                        .padStart(2, "0");
+                    document.getElementById("seconds").textContent = seconds
+                        .toString()
+                        .padStart(2, "0");
+                }
+            }
+
+            // Update countdown every second
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+
+            // Demo chat functionality
+            const demoMessages = document.getElementById("demo-messages");
+            const demoInputField = document.getElementById("demo-input-field");
+            const demoSendBtn = document.getElementById("demo-send-btn");
+
+            // Sample demo queries
+            const demoQueries = [
+                "Show me summer dresses for women",
+                "I need running shoes under $100",
+                "What are some good tech gifts for teenagers?",
+                "Looking for eco-friendly kitchen products",
+                "I need a business casual outfit for men",
+            ];
+
+            // Demo responses
+            const demoResponses = [
+                {
+                    text: "Here are some beautiful summer dresses that would be perfect for the season:",
+                    products: [
+                        {
+                            title: "Floral Maxi Dress",
+                            price: "39.99 JOD",
+                            rating: "★★★★☆ (56)",
+                        },
+                        {
+                            title: "Casual Cotton Sundress",
+                            price: "29.95 JOD",
+                            rating: "★★★★★ (87)",
+                        },
+                    ],
+                },
+                {
+                    text: "I've found these top-rated running shoes under $100 that offer great support and comfort:",
+                    products: [
+                        {
+                            title: "Breathable Mesh Runners",
+                            price: "79.99 JOD",
+                            rating: "★★★★☆ (112)",
+                        },
+                        {
+                            title: "Lightweight Trail Shoes",
+                            price: "89.95 JOD",
+                            rating: "★★★★★ (64)",
+                        },
+                    ],
+                },
+                {
+                    text: "Teens love these tech gifts - they're both fun and practical:",
+                    products: [
+                        {
+                            title: "Wireless Earbuds",
+                            price: "59.99 JOD",
+                            rating: "★★★★☆ (149)",
+                        },
+                        {
+                            title: "Portable Power Bank",
+                            price: "34.95 JOD",
+                            rating: "★★★★★ (203)",
+                        },
+                    ],
+                },
+                {
+                    text: "These eco-friendly kitchen products will help reduce waste while looking stylish:",
+                    products: [
+                        {
+                            title: "Bamboo Utensil Set",
+                            price: "24.99 JOD",
+                            rating: "★★★★★ (78)",
+                        },
+                        {
+                            title: "Reusable Food Wraps",
+                            price: "18.95 JOD",
+                            rating: "★★★★☆ (92)",
+                        },
+                    ],
+                },
+                {
+                    text: "These business casual items will keep you looking professional yet comfortable:",
+                    products: [
+                        {
+                            title: "Slim Fit Chino Pants",
+                            price: "49.99 JOD",
+                            rating: "★★★★☆ (64)",
+                        },
+                        {
+                            title: "Oxford Button-Down Shirt",
+                            price: "39.95 JOD",
+                            rating: "★★★★★ (108)",
+                        },
+                    ],
+                },
+            ];
+
+            // Add user message to demo chat
+            function addUserMessage(text) {
+                const messageDiv = document.createElement("div");
+                messageDiv.className = "message user fade-in";
+                messageDiv.innerHTML = `
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="content">
+                    ${text}
+                </div>
+            `;
+                demoMessages.appendChild(messageDiv);
+                demoMessages.scrollTop = demoMessages.scrollHeight;
+            }
+
+            // Add bot response to demo chat
+            function addBotResponse(response) {
+                // Add typing indicator first
+                const typingDiv = document.createElement("div");
+                typingDiv.className = "message bot fade-in";
+                typingDiv.innerHTML = `
+                <div class="avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="content typing-animation">
+                    Thinking...
+                </div>
+            `;
+                demoMessages.appendChild(typingDiv);
+                demoMessages.scrollTop = demoMessages.scrollHeight;
+
+                // Remove typing indicator and add actual response after delay
+                setTimeout(() => {
+                    demoMessages.removeChild(typingDiv);
+
+                    const messageDiv = document.createElement("div");
+                    messageDiv.className = "message bot fade-in";
+
+                    let productsHtml = "";
+                    if (response.products && response.products.length > 0) {
+                        productsHtml = `
+                        <div class="products-grid">
+                            ${response.products
+                                .map(
+                                    (product) => `
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <i class="fas fa-box fa-2x" style="color: #cbd5e1;"></i>
+                                    </div>
+                                    <div class="product-details">
+                                        <div class="product-title">${product.title}</div>
+                                        <div class="product-price">${product.price}</div>
+                                        <div class="product-rating">${product.rating}</div>
+                                    </div>
+                                </div>
+                            `
+                                )
+                                .join("")}
+                        </div>
+
+                        <div style="margin-top: 10px; font-size: 0.8rem;">
+                            <a href="#" style="color: var(--primary);">See all recommendations →</a>
+                        </div>
+                    `;
+                    }
+
+                    messageDiv.innerHTML = `
+                    <div class="avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="content">
+                        ${response.text}
+                        ${productsHtml}
+                    </div>
+                `;
+
+                    demoMessages.appendChild(messageDiv);
+                    demoMessages.scrollTop = demoMessages.scrollHeight;
+                }, 1500);
+            }
+
+            // Handle demo input
+            function handleDemoInput() {
+                const userInput = demoInputField.value.trim();
+                if (userInput !== "") {
+                    addUserMessage(userInput);
+                    demoInputField.value = "";
+
+                    // Get random response
+                    const randomIndex = Math.floor(
+                        Math.random() * demoResponses.length
+                    );
+                    addBotResponse(demoResponses[randomIndex]);
+                }
+            }
+
+            // Set up event listeners
+            demoSendBtn.addEventListener("click", handleDemoInput);
+            demoInputField.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    handleDemoInput();
+                }
+            });
+
+            // Placeholder text animation
+            let currentPlaceholderIndex = 0;
+
+            function rotatePlaceholders() {
+                demoInputField.setAttribute(
+                    "placeholder",
+                    demoQueries[currentPlaceholderIndex]
+                );
+                currentPlaceholderIndex =
+                    (currentPlaceholderIndex + 1) % demoQueries.length;
+            }
+
+            setInterval(rotatePlaceholders, 3000);
+            rotatePlaceholders();
+
+            // Form submission handling
+            document
+                .getElementById("notify-btn")
+                .addEventListener("click", function () {
+                    const email = document.getElementById("email-input").value;
+                    if (email && email.includes("@")) {
+                        this.innerHTML = "Thanks!";
+                        this.disabled = true;
+                        document.getElementById("email-input").value = "";
+
+                        setTimeout(() => {
+                            this.innerHTML = "Notify Me";
+                            this.disabled = false;
+                        }, 3000);
+                    } else {
+                        alert("Please enter a valid email address");
+                    }
+                });
+        </script>
+    </body>
+</html>
